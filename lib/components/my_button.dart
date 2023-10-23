@@ -1,3 +1,4 @@
+//UI for sign-in button and gesture detection for tap
 import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
@@ -18,7 +19,7 @@ class MyButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
       ),
 
-      child: const Center(
+        child: const Center(
         child: Text(
             "Sign In",
             style: TextStyle(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "65220528494",
+    "project_id": "planupauth",
+    "storage_bucket": "planupauth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65220528494:android:d02162dfa24afa861fd97f",
+        "android_client_info": {
+          "package_name": "com.example.cpsc_362_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg-V-U8LVZpPYqxz3IpA3mIaBFJCsQb6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
