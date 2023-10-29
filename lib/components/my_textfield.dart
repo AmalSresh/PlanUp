@@ -9,8 +9,9 @@ class MyTextField extends StatelessWidget{
     super.key,
     required this.controller, //takes user input
     required this.hintText,   //tells user what should go in the box
-    required this.obscureText, //if user chooses they can show what they type or hide it
-  });
+    required this.obscureText, //shows user input if it is username and hides it if it is password
+  }
+  );
 
   @override
   Widget build(BuildContext context)
