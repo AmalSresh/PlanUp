@@ -33,6 +33,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_signin_button: ^2.0.0
+  fluttertoast: ^8.2.2
+  http: ^1.1.0
 
 
 dev_dependencies:

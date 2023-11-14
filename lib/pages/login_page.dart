@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
-
 class LoginPage extends StatefulWidget
 {
-  LoginPage({super.key});
+  final Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -21,45 +21,67 @@ class _LoginPageState extends State<LoginPage> {
 
   //sign user in method
   void signUserIn() async {
-
     //show loading circle
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        );
+    showDialog(context: context, builder: (context){
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+     },
+    );
+    //try sign in
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
+        email: emailController.text,
+        password: passwordController.text,
       );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email');
+      //pop loading circle
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e){
+      //pop loading circle
+      Navigator.pop(context);
+      //wrong email
+      if(e.code =="INVALID_LOGIN_CREDENTIALS") {
+        wrongCredentialMessage("invalid email or password");
       }
-      else if (e.code == 'wrong-password') {
-        print('Wrong password');
+      else{
+        wrongCredentialMessage("please fix email format");
       }
     }
-
-    //pop the loading circle
-    Navigator.pop(context);
   }
+
+  void wrongCredentialMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.blue,
+          title: Center(
+            child:  Text(
+              message,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context)
   {
     return Scaffold(
+
       backgroundColor: Colors.blue,
       body: SafeArea(
         child: Center (
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(10),
+
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 10),
         //logo
 
                 Image.asset('lib/images/logoFinal.png', height: 100,),
@@ -106,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
         //sign in button
                  MyButton(
+                   text: "Sign In",
                   onTap: signUserIn,
                 ),
 
@@ -147,22 +170,32 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                 const SizedBox(height: 25),
+                
                 //register
-                const Row(
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a member?'),
-                    SizedBox(width: 4),
-                    Text('Register now',
-                    style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold,
-                    ),
+                    const Text(
+                        'Not a member?',
+                        style: TextStyle(color: Colors.white)),
+                   const  SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text(
+                        'Register now',
+                        style: TextStyle(
+                        color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                      ),
+                      ),
                     ),
                   ],
                 ),
             ],
           )
         ),
+       ),
       ),
     );
   }

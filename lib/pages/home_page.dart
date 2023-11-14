@@ -18,14 +18,14 @@ import 'package:flutter/material.dart';
               actions: [
                 IconButton(
                     onPressed: signUserOut,
-                    icon: Icon(Icons.logout)
+                    icon: const Icon(Icons.logout)
                 )
               ],
           ),
           body: Center(
               child: Text(
-                "Logged In As: " + user.email!,
-                style: TextStyle(fontSize:20),
+                "Logged In As:  ${user.email!}",
+                style: const TextStyle(fontSize:20),
           )),
         );
       }
