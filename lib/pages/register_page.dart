@@ -4,6 +4,7 @@ import 'package:cpsc_362_project/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:cpsc_362_project/services/auth_services.dart';
 
 class RegisterPage extends StatefulWidget
 {
@@ -173,12 +174,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
+                  //sign in with google
                   const SizedBox(height: 25),
 
                   SignInButton(
                     Buttons.Google,
-                    text: "Sign in with Google",
-                    onPressed: () {},
+                    text: "Sign up with Google",
+                    onPressed: () {
+                      AuthService().signInWithGoogle();
+                    },
                   ),
 
                   const SizedBox(height: 25),

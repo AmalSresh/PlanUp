@@ -1,6 +1,7 @@
 //UI for login page and username/password text field controllers
 import 'package:cpsc_362_project/components/my_button.dart';
 import 'package:cpsc_362_project/components/my_textfield.dart';
+import 'package:cpsc_362_project/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -162,11 +163,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                   const SizedBox(height: 25),
-
+            //sign In with google
                   SignInButton(
                     Buttons.Google,
                     text: "Sign in with Google",
-                    onPressed: () {},
+                    onPressed: () {
+                      AuthService().signInWithGoogle();
+                    },
                   ),
 
                 const SizedBox(height: 25),

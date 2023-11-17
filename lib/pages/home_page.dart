@@ -1,9 +1,27 @@
+import 'package:cpsc_362_project/components/calendar_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-    
-    class HomePage extends StatelessWidget {
-       HomePage({super.key});
 
+    class HomePage extends StatefulWidget {
+       const HomePage({super.key});
+
+       @override
+       State<HomePage> createState() => _HomePageState();
+    }
+
+    class _HomePageState extends State<HomePage>{
+      //share calendar method
+       void shareCalendar() async{
+         //show loading circle
+         showDialog(
+           context: context,
+           builder: (context) {
+             return const Center(
+               child: CircularProgressIndicator(),
+             );
+           }
+           );
+       }
       final user = FirebaseAuth.instance.currentUser!;
 
       // sign user out method
@@ -15,19 +33,23 @@ import 'package:flutter/material.dart';
       Widget build(BuildContext context) {
         return Scaffold(
           appBar: AppBar(
+            title: const Text("Home Page"),
               actions: [
                 IconButton(
                     onPressed: signUserOut,
-                    icon: Icon(Icons.logout)
-                )
+                    icon: const Icon(Icons.logout)
+                ),
+                CalendarButton(
+                  onTap: () {},
+                ),//the share calendar button
               ],
           ),
           body: Center(
               child: Text(
-                "Logged In As: " + user.email!,
-                style: TextStyle(fontSize:20),
-          )),
+                "Logged In As: ${user.email!}",
+                style: const TextStyle(fontSize:20),
+            )
+          ),
         );
       }
     }
-    
