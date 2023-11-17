@@ -1,20 +1,20 @@
-<<<<<<< HEAD
-# cpsc_362_project
+CPSC 362 Project CSUF
 
-Generates activities near you using ai-powered decision making.
+Project Name: PlanUp
 
-## Getting Started
+Description: 
+For the individual or group of friends, who struggle to make plans or decisions of what to do for the day, “product name” is an organizational app that expedites the process of planning and saves time on creating a list of activities to do. This will be based on AI-generated plans that are based on preferences set by users.
 
-This project is a starting point for a Flutter application.
+Functions: Users will complete a short survey that quickly helps them select an activity to do and set a time for it. The process can be done multiple times to build up an itinerary for the day. The itineraries can be added to the user's calendar and shared with friends.
 
-A few resources to get you started if this is your first Flutter project:
+Technologies:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Flutter, OpenAI API, Google Maps API, mySQL, Firebase, Dart, Android Studio
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# CS362
->>>>>>> 585c424df079b526f759ffa3f3fa57ccb01ac571
+Contributors: 
+
+Amal Suresh, Carson Szeder, Chris Liwanag, Ethan Jin, Cyrus Manoj
+                  
+
+
+ 
