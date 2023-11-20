@@ -1,8 +1,8 @@
 //Will show login screen or homepage depending on authentication status
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 import 'login_or_register_page.dart';
+import 'page_directory.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -16,7 +16,7 @@ class AuthPage extends StatelessWidget {
           {
             //user is logged in
             if (snapshot.hasData) {
-                return HomePage();
+                return PageDirectory();
               }
             //User is NOT logged in
             else {
