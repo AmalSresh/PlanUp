@@ -10,8 +10,8 @@ class SurveyPage extends StatefulWidget {
 
 class _SurveyPageState extends State<SurveyPage> {
 
-  final String tQuestion = "hi";
-  final List<String> tAnswerList = ["1","2","3"];
+  final String tQuestion = "This is a very long question this is a very long question this is a very long question?";
+  final List<String> tAnswerList = ["Answer 1","Answer 2","Answer 3", "Answer 4"];
 
   // generate question
   void generateQ() {

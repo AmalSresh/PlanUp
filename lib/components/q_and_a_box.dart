@@ -11,19 +11,19 @@ class AnswerButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Colors.blue,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
           child: Text(
             text,
+            textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Colors.blue,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 15,
             ),
           ),
         ),
@@ -46,26 +46,46 @@ class QAndABox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(question),
-        centerTitle: true,
+        title: const Text('Quick Survey'),
       ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-        color: Colors.grey[400], // TEMPORARY, DELETE OR CHANGE COLOR LATER
-        child: ListView.builder(
-          itemCount: answers.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.all(10.0),
-              child: AnswerButton(
-                onTap: () {
-                  // Handle button tap
-                },
-                text: answers[index],
+      body: Column(
+        children: [
+          Container(
+            height: 90.0,
+            margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+            alignment: Alignment.center,
+            // color: Colors.grey, // TEMPORARY DELETE LATER
+            child: Text(
+              question,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+              // color: Colors.blue, // TEMPORARY DELETE LATER
+              alignment: Alignment.center,
+              child: ListView.builder(
+                itemCount: answers.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.all(10.0),
+                    child: AnswerButton(
+                      onTap: () {
+                        // Handle button tap
+                      },
+                      text: answers[index],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
