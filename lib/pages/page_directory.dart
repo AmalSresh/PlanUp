@@ -1,3 +1,4 @@
+import 'package:cpsc_362_project/pages/survey_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/pages/account_page.dart';
 import 'package:cpsc_362_project/pages/home_page.dart';
@@ -22,6 +23,7 @@ import 'package:cpsc_362_project/pages/home_page.dart';
       List<Widget> get _pages => [
         HomePage(),
         UserAccount(),
+        SurveyPage(), // TEMPORARY DELETE LATER
       ];
 
 
@@ -34,8 +36,9 @@ import 'package:cpsc_362_project/pages/home_page.dart';
              currentIndex: _selectedIndex,
              onTap: _navigateBottomBar,
              items: [
-               BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-               BottomNavigationBarItem(icon: Icon(Icons.person), label: "account"),
+               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+               BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+               BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Survey"), //TEMPORARY DELETE LATER
              ],
            ),
         );
