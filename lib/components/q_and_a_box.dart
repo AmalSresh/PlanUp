@@ -32,16 +32,23 @@ class AnswerButton extends StatelessWidget {
   }
 }
 
-class QAndABox extends StatelessWidget {
+class QAndABox extends StatefulWidget {
   final String question;
   final List<String> answers;
+  final Function()? onTap;
 
   const QAndABox({
     super.key,
     required this.question,
     required this.answers,
+    required this.onTap,
   });
 
+  @override
+  State<QAndABox> createState() => _QAndABoxState();
+}
+
+class _QAndABoxState extends State<QAndABox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +63,7 @@ class QAndABox extends StatelessWidget {
             alignment: Alignment.center,
             // color: Colors.grey, // TEMPORARY DELETE LATER
             child: Text(
-              question,
+              widget.question,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20.0,
@@ -70,15 +77,13 @@ class QAndABox extends StatelessWidget {
               // color: Colors.blue, // TEMPORARY DELETE LATER
               alignment: Alignment.center,
               child: ListView.builder(
-                itemCount: answers.length,
+                itemCount: widget.answers.length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.all(10.0),
                     child: AnswerButton(
-                      onTap: () {
-                        // Handle button tap
-                      },
-                      text: answers[index],
+                      onTap: widget.onTap,
+                      text: widget.answers[index],
                     ),
                   );
                 },

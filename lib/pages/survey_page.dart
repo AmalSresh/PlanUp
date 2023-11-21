@@ -20,6 +20,6 @@ class _SurveyPageState extends State<SurveyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return QAndABox(question: tQuestion, answers: tAnswerList);
+    return QAndABox(question: tQuestion, answers: tAnswerList, onTap: generateQ);
   }
 }
