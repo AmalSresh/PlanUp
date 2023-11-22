@@ -12,10 +12,10 @@ class CalendarButton extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-            padding: const EdgeInsets.all(25),
-            margin: const EdgeInsets.symmetric(horizontal:25),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
 
@@ -24,7 +24,7 @@ class CalendarButton extends StatelessWidget {
                 "Share Calendar",
                 style: TextStyle(
                   color: Colors.blue,
-                  fontSize: 20,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),

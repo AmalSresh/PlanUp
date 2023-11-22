@@ -24,8 +24,11 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Home Page"),
         actions: [
-          CalendarButton(
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 7.0),
+            child: CalendarButton(
             onTap: () {},
+            ),
           ),
         ],
       ),
