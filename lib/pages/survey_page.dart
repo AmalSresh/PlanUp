@@ -23,7 +23,7 @@ class _SurveyPageState extends State<SurveyPage> {
   void generateNextQAndA(final int index) {
     // set lastQuestion flag to TRUE if already generated last question
     // output question and answer to data file
-    // generate new QAndAInput and replace ... object with new question and answer
+    // generate new QAndAInput and replace input object with new question and answer
 
     // below is just example of usage DO NOT USE IN FINAL CODE
     print(input.answers[index]);
@@ -38,7 +38,7 @@ class _SurveyPageState extends State<SurveyPage> {
 
   // resets survey to first question
   void resetSurvey() {
-    // REQUIRED set lastQuestion flag to false
+    // REQUIRED IF NOT PUTTING FLAG IN EXTERNAL FILE set lastQuestion flag to false
     lastQuestion = false;
     // set input variable back to whatever first question and continue generating
 
