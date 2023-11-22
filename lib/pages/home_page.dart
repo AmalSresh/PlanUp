@@ -1,3 +1,4 @@
+import 'package:cpsc_362_project/pages/survey_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/components/calendar_button.dart';
 
@@ -23,10 +24,33 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Home Page"),
         actions: [
-          CalendarButton(
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 7.0),
+            child: CalendarButton(
             onTap: () {},
+            ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.large(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SurveyPage()),
+          );
+        },
+        child: const Text(
+          'Take Quick Survey',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  Widget placesColumn() {
+    return Center(
+        child: Column(
+
       ),
     );
   }
