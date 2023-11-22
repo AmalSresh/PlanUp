@@ -46,4 +46,12 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  Widget placesColumn() {
+    return Center(
+        child: Column(
+
+      ),
+    );
+  }
 }
