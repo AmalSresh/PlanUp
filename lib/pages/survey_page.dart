@@ -32,7 +32,7 @@ class _SurveyPageState extends State<SurveyPage> {
       lastQuestion = true;
     }
     input.question = "This is long question number 2?";
-    input.answers = ["Q2 Answer 1","Q2 Answer 2","Q2 Answer 3", "Q2 Answer 4"];
+    input.answers = ["Q2 Answer 1","Q2 Answer 2","Q2 Answer 3"];
     // end example
   }
 
