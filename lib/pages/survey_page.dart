@@ -36,19 +36,6 @@ class _SurveyPageState extends State<SurveyPage> {
     // end example
   }
 
-  // resets survey to first question
-  void resetSurvey() {
-    // REQUIRED IF NOT PUTTING FLAG IN EXTERNAL FILE set lastQuestion flag to false
-    lastQuestion = false;
-    // set input variable back to whatever first question and continue generating
-
-    // below is just example of usage DO NOT USE IN FINAL CODE
-    input = QAndAInput(
-        question: "This is a very long question this is a very long question this is a very long question?",
-        answers: ["Q1 Answer 1","Q1 Answer 2","Q1 Answer 3", "Q1 Answer 4"]);
-    // end example
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,63 +48,77 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   Widget qAndAColumn() {
-    return Column(
-      children: [
-        Container(
-          height: 90.0,
-          margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+    return Column( children: [
+      Container(
+        height: 90.0,
+        margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+        alignment: Alignment.center,
+        // color: Colors.grey, // TEMPORARY DELETE LATER
+        child: Text(
+          input.question,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Expanded(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+          // color: Colors.blue, // TEMPORARY DELETE LATER
           alignment: Alignment.center,
-          // color: Colors.grey, // TEMPORARY DELETE LATER
-          child: Text(
-            input.question,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
+          child: ListView.builder(
+            itemCount: input.answers.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.all(10.0),
+                child: AnswerButton(
+                  onTap: () {
+                    setState(() {
+                      generateNextQAndA(index);
+                    });
+                  },
+                  text: input.answers[index],
+                ),
+              );
+            },
           ),
         ),
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-            // color: Colors.blue, // TEMPORARY DELETE LATER
-            alignment: Alignment.center,
-            child: ListView.builder(
-              itemCount: input.answers.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.all(10.0),
-                  child: AnswerButton(
-                    onTap: () {
-                      setState(() {
-                        generateNextQAndA(index);
-                      });
-                    },
-                    text: input.answers[index],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
+      ),],
     );
   }
 
   Widget endSurvey() {
     return Center(
-        child: Container(
-          margin: const EdgeInsets.only(left: 60.0, right: 60.0),
-          height: 75.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children:[
+        Container(
+          margin: const EdgeInsets.only(left: 45.0, right: 45.0, bottom: 20.0),
+          child: Center(
+            child: Text(
+              'New options have been generated for you!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.withOpacity(0.7),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 65.0),
+          height: 65.0,
           alignment: Alignment.center,
           child: AnswerButton(
             onTap: () {
-              setState(() {
-                resetSurvey();
-              });
-            },
-            text: "Generate New Survey",
-          )
+              Navigator.pop(context);
+              },
+            text: "Awesome!",
+          ),
+        ),],
       ),
     );
   }
