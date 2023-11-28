@@ -23,14 +23,19 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home Page"),
-        actions: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 7.0),
-            child: CalendarButton(
-            onTap: () {},
-            ),
-          ),
-        ],
+      ),
+      body: Center(
+        child:Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(height: 10),
+            CalendarButton(
+              onTap: () {
+                //Share Calendar Logic
+              }
+            )
+          ]
+        )
       ),
       floatingActionButton: FloatingActionButton.large(
         onPressed: () {
