@@ -1,3 +1,4 @@
+import 'package:cpsc_362_project/pages/change_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/pages/account_page.dart';
 import 'package:cpsc_362_project/pages/home_page.dart';

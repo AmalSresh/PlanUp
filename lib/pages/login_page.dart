@@ -5,6 +5,7 @@ import 'package:cpsc_362_project/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'forgot_pass_page.dart';
 
 class LoginPage extends StatefulWidget
 {
@@ -113,21 +114,36 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 10),
-        //forgot password
-                const Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 25.0),
+              //forgot password
+                 Padding(
+                  padding:  const EdgeInsets.symmetric(horizontal: 25.0),
                   child:  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children:[
-                    Text('Forgot Password',
-                      style: TextStyle(color: Colors.black),
+                      GestureDetector(
+                        onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) {
+                          return ForgotPasswordPage();
+                            },
+                          ),
+                        );
+                      },
+                        child: const Text(
+                          'Forgot Password',
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                          ),
                       ),
-                    ]
+                    ],
                   ),
                 ),
 
                 const SizedBox(height: 25),
-        //sign in button
+              //sign in button
                  MyButton(
                    text: "Sign In",
                   onTap: signUserIn,
