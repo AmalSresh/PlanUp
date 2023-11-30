@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
 
-import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/components/q_and_a_box.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +19,7 @@ class _SurveyPageState extends State<SurveyPage> {
 
   // false by default, reset flag if generating new survey
   bool lastQuestion = false;
+  bool isLoading = false;
 
   // Add your Google API Key here
   final String apiKey = 'AIzaSyAOsViyztEmFWV3qOV_fGNn86qTlQKps8U';
@@ -42,13 +41,18 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   // generate next question
-  Future<void> generateNextQAndA(final int index) async {
+  Future<void> outputAnswer(final int index) async {
+    print("start outputAnswer function");
     // set lastQuestion flag to TRUE if already generated last question
     // output question and answer to data file
     // generate new QAndAInput and replace input object with new question and answer
 
-    // below is just example of usage DO NOT USE IN FINAL CODE
-    print(input.answers[index]);
+    setState(() {
+      isLoading = true;
+    });
+
+    // do something with given user answer
+    print("Output from question is: ${input.answers[index]}");
 
     List<dynamic> apiData = [];
     // Example: Set destination and landmark based on user input
@@ -77,10 +81,8 @@ class _SurveyPageState extends State<SurveyPage> {
       }
     }
 
-
-    if (input.question == "This is long question number 2?") {
-      lastQuestion = true;
-
+    // not sure when this block will be used
+    if (false) {
       // Generate itinerary using OpenAI after the specific question is answered
       try {
         String itinerary = await generateItineraryUsingOpenAI(destination, input.answers, apiData);
@@ -89,9 +91,27 @@ class _SurveyPageState extends State<SurveyPage> {
         print('Error in generating itinerary: $e');
       }
     }
+
+    setState(() {
+      isLoading = false;
+    });
+
+    print("end outputAnswer function");
+  }
+
+  // the input.question and input.answer should somehow be updated before this point
+  void nextQAndA() {
+    print("start nextQAndA function");
+
+    // something should indicate when the last question is at this point
+    if (input.question == "What time would you like your itinerary to be?") {
+      lastQuestion = true;
+    }
+
     input.question = "What time would you like your itinerary to be?";
     input.answers = ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"];
-    // end example
+
+    print("end nextQAndA function");
   }
 
   Future<String> generateItineraryUsingOpenAI(String destination, List<String> userSpecifications, List<dynamic> apiData) async {
@@ -117,47 +137,65 @@ class _SurveyPageState extends State<SurveyPage> {
     );
   }
 
+  Widget loadingScreen() {
+    return isLoading
+      ? Container(
+        color: Colors.black.withOpacity(0.5),
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      )
+      : const SizedBox.shrink(); // return an empty SizedBox when not loading
+  }
+
   Widget qAndAColumn() {
-    return Column( children: [
-      Container(
-        height: 90.0,
-        margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-        alignment: Alignment.center,
-        // color: Colors.grey, // TEMPORARY DELETE LATER
-        child: Text(
-          input.question,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      Expanded(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-          // color: Colors.blue, // TEMPORARY DELETE LATER
-          alignment: Alignment.center,
-          child: ListView.builder(
-            itemCount: input.answers.length,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.all(10.0),
-                child: AnswerButton(
-                  onTap: () {
-                    setState(() {
-                      generateNextQAndA(index);
-                    });
-                  },
-                  text: input.answers[index],
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Container(
+              height: 90.0,
+              margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+              alignment: Alignment.center,
+              child: Text(
+                input.question,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+                alignment: Alignment.center,
+                child: ListView.builder(
+                  itemCount: input.answers.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.all(10.0),
+                      child: AnswerButton(
+                        onTap: () async {
+                          await outputAnswer(index);
+                          setState(() {
+                            nextQAndA();
+                          });
+                        },
+                        text: input.answers[index],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
-      ),],
+        loadingScreen(),
+      ],
     );
   }
+
 
   Widget endSurvey() {
     return Center(
