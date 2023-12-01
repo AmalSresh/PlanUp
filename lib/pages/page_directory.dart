@@ -1,4 +1,3 @@
-import 'package:cpsc_362_project/pages/change_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/pages/account_page.dart';
 import 'package:cpsc_362_project/pages/home_page.dart';
@@ -32,11 +31,39 @@ class _PageDirectory extends State<PageDirectory>{
     return Scaffold(
       body: _pages[_selectedIndex],
        bottomNavigationBar: BottomNavigationBar(
+         backgroundColor: Colors.blue,
          currentIndex: _selectedIndex,
          onTap: _navigateBottomBar,
+         selectedItemColor: Colors.white,
+         unselectedItemColor: Colors.white,
+         selectedFontSize: 15,
+         unselectedFontSize: 15,
          items: const [
-           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+           BottomNavigationBarItem(
+             activeIcon:
+              Icon(
+               Icons.home,
+               color: Colors.white,
+              ),
+                icon:
+                    Icon(Icons.home_rounded,
+                    color: Colors.white,
+
+                    ),
+                    label: "Home",
+           ),
+           BottomNavigationBarItem(
+             activeIcon:
+             Icon(
+               Icons.person_2,
+               color: Colors.white,
+             ),
+             icon:
+             Icon(Icons.person_2,
+               color: Colors.white,
+             ),
+             label: "Account",
+           ),
          ],
        ),
     );

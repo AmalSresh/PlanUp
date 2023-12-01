@@ -30,11 +30,11 @@ environment:
 dependencies:
   firebase_auth: ^4.11.1
   firebase_core: ^2.19.0
-  http: ^1.1.2
   flutter:
     sdk: flutter
   flutter_signin_button: ^2.0.0
   fluttertoast: ^8.2.2
+  http: ^1.1.0
   google_sign_in: ^6.1.6
   dart_openai: ^5.0.0
 

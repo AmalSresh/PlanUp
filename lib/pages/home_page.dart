@@ -21,7 +21,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: const Text("Home Page"),
       ),
       body: Center(
@@ -38,6 +40,7 @@ class HomePage extends StatelessWidget {
         )
       ),
       floatingActionButton: FloatingActionButton.large(
+        backgroundColor: Colors.blue,
         onPressed: () {
           Navigator.push(
             context,
@@ -47,6 +50,9 @@ class HomePage extends StatelessWidget {
         child: const Text(
           'Take Quick Survey',
           textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+          )
         ),
       ),
     );

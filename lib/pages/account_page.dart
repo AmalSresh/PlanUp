@@ -22,124 +22,135 @@ class _UserAccountState extends State<UserAccount> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-
+        backgroundColor: Colors.blue,
         title: const Text("Account Page")
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
+       // child: Center(
+         child: SingleChildScrollView(
             padding: const EdgeInsets.all(10),
 
-            child: Column(
-              children: [
+            child: Container(
 
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
 
-              const SizedBox(height: 45,),
-
-                // User email and change email option
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: AppBar(
-                    title:  Text("User Email: " + user.email!,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
+                    // User email and change email option
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: AppBar(
+                        backgroundColor: Colors.blue,
+                        title:  Text("User Email: " + user.email!,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            )
                         )
-                    )
-                    ),
-                  ),
+                        ),
+                      ),
 
 
-                const SizedBox(height: 5,),
+                    const SizedBox(height: 10,),
 
-                //change email button
-                SizedBox(
-                  width: 120,
-                  height: 40,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ChangeEmailPage();
-                            },
+                    //change email button
+                    SizedBox(
+                      width: 150,
+                      height: 60,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ChangeEmailPage();
+                                },
+                              ),
+                            );
+                          },
+                          child: Text("Change Email",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.white,
+                              ),
                           ),
-                        );
-                      },
-                      child: Text("Change Email",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.white,
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )
                           )
                       ),
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )
-                      )
-                  ),
-                ),
-
-                const SizedBox(height: 10,),
-
-              // Change password button
-                SizedBox(
-                  width: 150,
-                  height: 40,
-                  child: ElevatedButton(
-                      onPressed: (){
-                Navigator.push(
-                context,
-                MaterialPageRoute(
-                      builder: (context) {
-                      return ChangePasswordPage();
-                      },
                     ),
-                  );
-                },
-                      child: Text("Change Password",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.white,
-                          ))
-                      ,
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+
+                    const SizedBox(height: 10,),
+
+                  // Change password button
+                    SizedBox(
+                      width: 150,
+                      height: 60,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ChangePasswordPage();
+                                },
+                              ),
+                            );
+                          },
+                          child: Text("Change Password",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )
                           )
-                      )
-                  ),
-                ),
-
-                const SizedBox(height: 25,),
-
-                //sign out
-                SizedBox(
-                  width: 150,
-                  height: 50,
-                  child: ElevatedButton(
-                      onPressed: signUserOut,
-                      child: Text(
-                          "Sign Out",
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        color: Colors.white,
-                        )
                       ),
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )
-                      )
-                  ),
-                ),
+                    ),
 
-              ],
+                    const SizedBox(height: 200,),
+
+                    //sign out
+                    SizedBox(
+                      width: 150,
+                      height: 60,
+                      child: ElevatedButton(
+                          onPressed: signUserOut,
+                          child: Text("Sign Out",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )
+                          )
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+
       ),
     );
 
