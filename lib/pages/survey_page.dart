@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/components/q_and_a_box.dart';
 import 'package:http/http.dart' as http;
@@ -10,12 +9,14 @@ class SurveyPage extends StatefulWidget {
   @override
   State<SurveyPage> createState() => _SurveyPageState();
 }
-
+int selectedAnswerIndex = -1;
 class _SurveyPageState extends State<SurveyPage> {
 
   QAndAInput input = QAndAInput(
-      question: "What do you want to prioritize?",
-      answers: ["Outdoor Activity","Entertainment","Family Attractions", "Historical Locations"]);
+
+
+  question: "What time would you like your itinerary to be?",
+  answers: ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"]);
 
   // false by default, reset flag if generating new survey
   bool lastQuestion = false;
@@ -81,19 +82,11 @@ class _SurveyPageState extends State<SurveyPage> {
       }
     }
 
-    // not sure when this block will be used
-    if (false) {
-      // Generate itinerary using OpenAI after the specific question is answered
-      try {
-        String itinerary = await generateItineraryUsingOpenAI(destination, input.answers, apiData);
-        print(itinerary); // Handle the generated itinerary as needed
-      } catch (e) {
-        print('Error in generating itinerary: $e');
-      }
-    }
+
 
     setState(() {
       isLoading = false;
+      selectedAnswerIndex = index;
     });
 
     print("end outputAnswer function");
@@ -104,12 +97,14 @@ class _SurveyPageState extends State<SurveyPage> {
     print("start nextQAndA function");
 
     // something should indicate when the last question is at this point
-    if (input.question == "What time would you like your itinerary to be?") {
+    if (input.question == "What do you want to prioritize?") {
       lastQuestion = true;
     }
 
-    input.question = "What time would you like your itinerary to be?";
-    input.answers = ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"];
+    // input.question = "What time would you like your itinerary to be?";
+    // input.answers = ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"];
+    input.question= "What do you want to prioritize?";
+    input.answers= ["Outdoor Activity","Entertainment","Family Attractions", "Historical Locations"];
 
     print("end nextQAndA function");
   }
@@ -181,7 +176,6 @@ class _SurveyPageState extends State<SurveyPage> {
                           setState(() {
                             nextQAndA();
                           });
-
                         },
                         text: input.answers[index],
                       ),
@@ -199,35 +193,78 @@ class _SurveyPageState extends State<SurveyPage> {
 
 
   Widget endSurvey() {
+    String response = "";
+
+    if (selectedAnswerIndex != -1) {
+      String userSelection = input.answers[selectedAnswerIndex];
+      if (userSelection == "Outdoor Activity") {
+        response =
+        '8:00 am - 10:00 am: Breakfast and Exploration at Hillcrest Park \n\n '
+            '10:30 am - 12:00 pm: Visit the Fullerton Arboretum \n\n '
+            '12:30 pm - 2:00 pm: Lunch at Downtown Fullerton \n\n '
+            '2:30 pm - 4:30 pm: Discovery Cube Orange County \n\n '
+            '5:00 pm - 6:30 pm: Early Dinner at Anaheim Packing District \n\n '
+            '7:00 pm - 8:00 pm: Stroll around Laguna Lake Park';
+      } else if (userSelection == "Entertainment") {
+        response =
+            '8:00 am - 10:00 am: Breakfast and Exploration at Downtown Fullerton\n'
+            '10:30 am - 12:00 pm: Visit the Fullerton Museum Center\n'
+            '12:30 pm - 2:00 pm: Lunch at Anaheim Packing District\n'
+            '2:30 pm - 4:30 pm: Fun at Camelot Golfland\n'
+            '5:00 pm - 6:30 pm: Early Dinner and Shopping at Brea Mall\n'
+            '7:00 pm - 8:00 pm: Relaxing Walk and Dessert at Laguna Lake Park';
+      } else if(userSelection == "Family Attraction")
+        {
+          response =
+          '8:00 am - 10:00 am: Breakfast and Exploration at Downtown Fullerton\n'
+              '10:30 am - 12:00 pm: Visit the Fullerton Museum Center\n'
+              '12:30 pm - 2:00 pm: Lunch at Anaheim Packing District\n'
+              '2:30 pm - 4:30 pm: Fun at Camelot Golfland\n'
+              '5:00 pm - 6:30 pm: Early Dinner and Shopping at Brea Mall\n'
+              '7:00 pm - 8:00 pm: Relaxing Walk and Dessert at Laguna Lake Park';
+        }
+      else if(userSelection == "Historical Locations")
+        {
+          response =
+              '8:00 am - 10:00 am: Breakfast and Stroll in Historic Downtown Fullerton\n'
+              '10:30 am - 12:00 pm: Visit the Fullerton Museum Center\n'
+              '12:30 pm - 2:00 pm: Lunch at the Anaheim Packing District\n'
+              '2:30 pm - 4:30 pm: Tour the Richard Nixon Presidential Library and Museum\n'
+              '5:00 pm - 6:30 pm: Visit the Olinda Oil Museum and Trail\n'
+              '7:00 pm - 8:00 pm: Dinner in Old Towne Orange';
+        }
+    }
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children:[
-        Container(
-          margin: const EdgeInsets.only(left: 45.0, right: 45.0, bottom: 20.0),
-          child: Center(
-            child: Text(
-              '8:00 am - 10:00 am: Breakfast and Exploration at Hillcrest Park \n\n 10:30 am - 12:00 pm: Visit the Fullerton Arboretum \n\n 12:30 pm - 2:00 pm: Lunch at Downtown Fullerton \n\n 2:30 pm - 4:30 pm: Discovery Cube Orange County \n\n 5:00 pm - 6:30 pm: Early Dinner at Anaheim Packing District \n\n 7:00 pm - 8:00 pm: Stroll around Laguna Lake Park',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.withOpacity(0.7),
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 45.0, right: 45.0, bottom: 20.0),
+            child: Center(
+              child: Text(
+                response,
+                textAlign: TextAlign.center,
+                style:  TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.withOpacity(0.7),
+                ),
               ),
             ),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 65.0),
-          height: 65.0,
-          alignment: Alignment.center,
-          child: AnswerButton(
-            onTap: () {
-              Navigator.pop(context);
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 65.0),
+            height: 65.0,
+            alignment: Alignment.center,
+            child: AnswerButton(
+              onTap: () {
+                Navigator.pop(context);
               },
-            text: "Awesome!",
+              text: "Awesome!",
+            ),
           ),
-        ),],
+        ],
       ),
     );
   }

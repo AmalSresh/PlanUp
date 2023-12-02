@@ -98,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 10),
                   //logo
 
-                  Image.asset('lib/images/logoFinal.png', height: 100,),
+                  Image.asset('lib/images/planUpLogoFinal.png', height: 150,),
                   //welcome
                   const SizedBox(height: 40),
                   const Text(
@@ -185,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 10),
 
                   //register
                   Row(
