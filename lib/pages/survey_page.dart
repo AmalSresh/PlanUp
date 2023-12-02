@@ -181,6 +181,7 @@ class _SurveyPageState extends State<SurveyPage> {
                           setState(() {
                             nextQAndA();
                           });
+
                         },
                         text: input.answers[index],
                       ),
@@ -206,7 +207,7 @@ class _SurveyPageState extends State<SurveyPage> {
           margin: const EdgeInsets.only(left: 45.0, right: 45.0, bottom: 20.0),
           child: Center(
             child: Text(
-              'New options have been generated for you!',
+              '8:00 am - 10:00 am: Breakfast and Exploration at Hillcrest Park \n\n 10:30 am - 12:00 pm: Visit the Fullerton Arboretum \n\n 12:30 pm - 2:00 pm: Lunch at Downtown Fullerton \n\n 2:30 pm - 4:30 pm: Discovery Cube Orange County \n\n 5:00 pm - 6:30 pm: Early Dinner at Anaheim Packing District \n\n 7:00 pm - 8:00 pm: Stroll around Laguna Lake Park',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20.0,
