@@ -4,7 +4,11 @@ import 'package:cpsc_362_project/components/q_and_a_box.dart';
 import 'package:http/http.dart' as http;
 
 class SurveyPage extends StatefulWidget {
-  const SurveyPage({super.key});
+  final Function(int) generateCardsCallback;
+
+  const SurveyPage({Key? key, required this.generateCardsCallback})
+      : super(key: key);
+
 
   @override
   State<SurveyPage> createState() => _SurveyPageState();
@@ -12,11 +16,14 @@ class SurveyPage extends StatefulWidget {
 int selectedAnswerIndex = -1;
 class _SurveyPageState extends State<SurveyPage> {
 
+  void updateHomePage() {
+    // Call the callback function to update HomePage's state
+    widget.generateCardsCallback(selectedAnswerIndex);
+  }
+
   QAndAInput input = QAndAInput(
-
-
-  question: "What time would you like your itinerary to be?",
-  answers: ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"]);
+      question: "What time would you like your itinerary to be?",
+      answers: ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"]);
 
   // false by default, reset flag if generating new survey
   bool lastQuestion = false;
@@ -193,48 +200,6 @@ class _SurveyPageState extends State<SurveyPage> {
 
 
   Widget endSurvey() {
-    String response = "";
-
-    if (selectedAnswerIndex != -1) {
-      String userSelection = input.answers[selectedAnswerIndex];
-      if (userSelection == "Outdoor Activity") {
-        response =
-        '8:00 am - 10:00 am: Breakfast and Exploration at Hillcrest Park \n\n '
-            '10:30 am - 12:00 pm: Visit the Fullerton Arboretum \n\n '
-            '12:30 pm - 2:00 pm: Lunch at Downtown Fullerton \n\n '
-            '2:30 pm - 4:30 pm: Discovery Cube Orange County \n\n '
-            '5:00 pm - 6:30 pm: Early Dinner at Anaheim Packing District \n\n '
-            '7:00 pm - 8:00 pm: Stroll around Laguna Lake Park';
-      } else if (userSelection == "Entertainment") {
-        response =
-            '8:00 am - 10:00 am: Breakfast and Exploration at Downtown Fullerton\n'
-            '10:30 am - 12:00 pm: Visit the Fullerton Museum Center\n'
-            '12:30 pm - 2:00 pm: Lunch at Anaheim Packing District\n'
-            '2:30 pm - 4:30 pm: Fun at Camelot Golfland\n'
-            '5:00 pm - 6:30 pm: Early Dinner and Shopping at Brea Mall\n'
-            '7:00 pm - 8:00 pm: Relaxing Walk and Dessert at Laguna Lake Park';
-      } else if(userSelection == "Family Attraction")
-        {
-          response =
-          '8:00 am - 10:00 am: Breakfast and Exploration at Downtown Fullerton\n'
-              '10:30 am - 12:00 pm: Visit the Fullerton Museum Center\n'
-              '12:30 pm - 2:00 pm: Lunch at Anaheim Packing District\n'
-              '2:30 pm - 4:30 pm: Fun at Camelot Golfland\n'
-              '5:00 pm - 6:30 pm: Early Dinner and Shopping at Brea Mall\n'
-              '7:00 pm - 8:00 pm: Relaxing Walk and Dessert at Laguna Lake Park';
-        }
-      else if(userSelection == "Historical Locations")
-        {
-          response =
-              '8:00 am - 10:00 am: Breakfast and Stroll in Historic Downtown Fullerton\n'
-              '10:30 am - 12:00 pm: Visit the Fullerton Museum Center\n'
-              '12:30 pm - 2:00 pm: Lunch at the Anaheim Packing District\n'
-              '2:30 pm - 4:30 pm: Tour the Richard Nixon Presidential Library and Museum\n'
-              '5:00 pm - 6:30 pm: Visit the Olinda Oil Museum and Trail\n'
-              '7:00 pm - 8:00 pm: Dinner in Old Towne Orange';
-        }
-    }
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -243,7 +208,7 @@ class _SurveyPageState extends State<SurveyPage> {
             margin: const EdgeInsets.only(left: 45.0, right: 45.0, bottom: 20.0),
             child: Center(
               child: Text(
-                response,
+                "Your itinerary has been generated for you on the home page!",
                 textAlign: TextAlign.center,
                 style:  TextStyle(
                   fontSize: 20.0,
@@ -259,6 +224,7 @@ class _SurveyPageState extends State<SurveyPage> {
             alignment: Alignment.center,
             child: AnswerButton(
               onTap: () {
+                updateHomePage();
                 Navigator.pop(context);
               },
               text: "Awesome!",
