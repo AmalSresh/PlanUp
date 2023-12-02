@@ -1,5 +1,5 @@
-## PlanUp
-# CPSC 362 Project CSUF
+# PlanUp
+## CPSC 362 Project CSUF
 
 ### Description
 For the individual or group of friends, who struggle to make plans or decisions of what to do for the day, “product name” is an organizational app that expedites the process of planning and saves time on creating a list of activities to do. This will be based on AI-generated plans that are based on preferences set by users.
