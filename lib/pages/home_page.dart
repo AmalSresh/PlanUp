@@ -38,40 +38,44 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.blue,
         title: const Text("Home Page"),
       ),
-      body:
-        (surveyIndex != -1) ? placesColumn() : null,
-      // body: Center(
-      //   child:Column(
-      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //     children: [
-      //       SizedBox(height: 10),
-      //       CalendarButton(
-      //         onTap: () {
-      //           //Share Calendar Logic
-      //         }
-      //       )
-      //     ]
-      //   )
-      // ),
-      floatingActionButton: FloatingActionButton.large(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SurveyPage(
-                generateCardsCallback: widget.generateCardsCallback,
+      body: (surveyIndex != -1) ? placesColumn() : defaultHomePageText(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FloatingActionButton.large(
+            backgroundColor: Colors.blue,
+            onPressed: () {
+              clearItinerary();
+            },
+            child: const Text(
+              'Clear Current Itinerary',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
               ),
             ),
-          );
-        },
-        child: const Text(
-          'Take Quick Survey',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-          )
-        ),
+          ),
+          FloatingActionButton.large(
+            backgroundColor: Colors.blue,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SurveyPage(
+                    generateCardsCallback: widget.generateCardsCallback,
+                  ),
+                ),
+              );
+            },
+            child: const Text(
+              'Take Quick Survey',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -93,6 +97,20 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
+    );
+  }
+
+  Widget defaultHomePageText() {
+    return Center(
+      child: Text(
+        "Take the quick survey to generate an itinerary!",
+        textAlign: TextAlign.center,
+        style:  TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey.withOpacity(0.7),
+        ),
+      ),
     );
   }
 
@@ -122,6 +140,12 @@ class _HomePageState extends State<HomePage> {
     }
     setState(() {
       surveyIndex = i;
+    });
+  }
+
+  void clearItinerary() {
+    setState(() {
+      surveyIndex = -1;
     });
   }
 }
