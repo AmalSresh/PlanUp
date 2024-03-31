@@ -3,27 +3,47 @@ import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/components/q_and_a_box.dart';
 import 'package:http/http.dart' as http;
 
-class SurveyPage extends StatefulWidget {
+class oldSurveyPage extends StatefulWidget {
   final Function(int) generateCardsCallback;
 
-  const SurveyPage({Key? key, required this.generateCardsCallback})
-      : super(key: key);
+  const oldSurveyPage({super.key, required this.generateCardsCallback});
 
 
   @override
-  State<SurveyPage> createState() => _SurveyPageState();
+  State<oldSurveyPage> createState() => _SurveyPageState();
 }
 int selectedAnswerIndex = -1;
-class _SurveyPageState extends State<SurveyPage> {
+class _SurveyPageState extends State<oldSurveyPage> {
 
   void updateHomePage() {
     // Call the callback function to update HomePage's state
     widget.generateCardsCallback(selectedAnswerIndex);
   }
 
+  TimeOfDay _startTime = TimeOfDay(hour: 8, minute: 0);
+  TimeOfDay _endTime = TimeOfDay(hour: 20, minute: 0);
+
+  void _showTimePicker({required bool isStartTime}) async {
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: isStartTime ? _startTime : _endTime,
+    );
+    if (selectedTime != null) {
+      setState(() {
+        if (isStartTime) {
+          _startTime = selectedTime;
+        } else {
+          _endTime = selectedTime;
+        }
+      });
+    }
+  }
+
+
+  @override
+
   QAndAInput input = QAndAInput(
-      question: "What time would you like your itinerary to be?",
-      answers: ["7 AM to 10 PM","10 AM to 10 PM","8 AM to 8 PM"]);
+      question: "What time would you like your itinerary to be?", answers: []);
 
   // false by default, reset flag if generating new survey
   bool lastQuestion = false;
@@ -150,58 +170,48 @@ class _SurveyPageState extends State<SurveyPage> {
       : const SizedBox.shrink(); // return an empty SizedBox when not loading
   }
 
-  Widget qAndAColumn() {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            Container(
-              height: 90.0,
-              margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-              alignment: Alignment.center,
-              child: Text(
-                input.question,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-                alignment: Alignment.center,
-                child: ListView.builder(
-                  itemCount: input.answers.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.all(10.0),
-                      child: AnswerButton(
-                        onTap: () async {
-                          await outputAnswer(index);
-                          setState(() {
-                            nextQAndA();
-                          });
-                        },
-                        text: input.answers[index],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-        loadingScreen(),
-      ],
-    );
-  }
+Widget qAndAColumn() {
+  return Scaffold(
+      body: Container(
 
+          child:  Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _showTimePicker(isStartTime: true);
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text(
+                'Start Time: ${_startTime.format(context)}',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.blue,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _showTimePicker(isStartTime: false);
+                },
+              ),
+              //SizedBox(width: 10.0),
+              Text(
+                'Start Time: ${_endTime.format(context)}',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.blue,
+                ),
+              ),
+            ],
+          )
+      )
+
+  );
+}
 
   Widget endSurvey() {
-    return Center(
-      child: Column(
+    return Scaffold(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
@@ -237,3 +247,4 @@ class _SurveyPageState extends State<SurveyPage> {
 
   openai({required String apiKey}) {}
 }
+

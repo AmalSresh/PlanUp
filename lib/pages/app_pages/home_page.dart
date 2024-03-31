@@ -1,4 +1,5 @@
-import 'package:cpsc_362_project/pages/survey_page.dart';
+import 'package:cpsc_362_project/pages/app_pages/old_survey_page.dart';
+import 'package:cpsc_362_project/pages/app_pages/survey_pages/survey_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/components/location_card.dart';
 import 'package:cpsc_362_project/components/calendar_button.dart';
@@ -61,9 +62,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SurveyPage(
-                    generateCardsCallback: widget.generateCardsCallback,
-                  ),
+                  builder: (context) => SurveyPage(),
                 ),
               );
             },

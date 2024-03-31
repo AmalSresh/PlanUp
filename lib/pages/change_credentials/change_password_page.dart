@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cpsc_362_project/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'account_page.dart';
+import '../app_pages/account_page.dart';
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cpsc_362_project/pages/account_page.dart';
-import 'package:cpsc_362_project/pages/home_page.dart';
+import 'package:cpsc_362_project/pages/app_pages/account_page.dart';
+import 'package:cpsc_362_project/pages/app_pages/home_page.dart';
 
 class PageDirectory extends StatefulWidget {
    const PageDirectory({Key? key}) : super(key:key);
