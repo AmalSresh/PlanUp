@@ -26,6 +26,7 @@ android {
     namespace "com.example.cpsc_362_project"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -66,4 +67,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies{
+    implementation 'com.android.support:multidex:1.0.3'
+}
+

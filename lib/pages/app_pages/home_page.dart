@@ -1,8 +1,5 @@
-import 'package:cpsc_362_project/pages/app_pages/old_survey_page.dart';
 import 'package:cpsc_362_project/pages/app_pages/survey_pages/survey_page.dart';
 import 'package:flutter/material.dart';
-import 'package:cpsc_362_project/components/location_card.dart';
-import 'package:cpsc_362_project/components/calendar_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,15 +7,14 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 
-  void generateCardsCallback(int index) {
-    _homePageState?.generateCards(index);
-  }
+  // void generateCardsCallback(int index) {
+  //   _homePageState?.generateCards(index);
+  // }
 }
 
 _HomePageState? _homePageState;
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -36,13 +32,28 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 70,
         backgroundColor: Colors.blue,
-        title: const Text("Home Page"),
+        title: const Text(
+          "Home",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: (surveyIndex != -1) ? placesColumn() : defaultHomePageText(),
+      body: SizedBox(
+        height: 10,
+      ),
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //alignment: WrapAlignment.spaceEvenly,
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          SizedBox(
+            width: 30,
+          ),
           FloatingActionButton.large(
             backgroundColor: Colors.blue,
             onPressed: () {
@@ -56,6 +67,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          SizedBox(width: 185),
           FloatingActionButton.large(
             backgroundColor: Colors.blue,
             onPressed: () {
@@ -79,67 +91,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget placesColumn() {
-    return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-        alignment: Alignment.center,
-        child: ListView.builder(
-          itemCount: title.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.all(10.0),
-              child: LocationCard(
-                title: title[index],
-                subtitle: subtitle[index],
-                time: time[index],
-              ),
-            );
-          },
-        ),
-    );
-  }
-
   Widget defaultHomePageText() {
     return Center(
       child: Text(
         "Take the quick survey to generate an itinerary!",
         textAlign: TextAlign.center,
-        style:  TextStyle(
+        style: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
           color: Colors.grey.withOpacity(0.7),
         ),
       ),
     );
-  }
-
-  void generateCards(int i) {
-    switch(i) {
-      case(0): // outdoor activity
-        title = ["Hillcrest Park", "Fullerton Arboretum", "Downtown Fullerton", "Discovery Cube Orange County", "Anaheim Packing District", "Laguna Lake Park"];
-        subtitle = ["Breakfast and exploration", "Visit", "Lunch", "Explore", "Early dinner", "Stroll around"];
-        time = ["8:00 am - 10:00 am", "10:30 am - 12:00pm", "12:30 pm - 2:00 pm", "2:30 pm - 4:30 pm", "5:00 pm - 6:30 pm", "7:00 pm - 8:00 pm"];
-        break;
-      case(1): // entertainment
-        title = ["Downtown Fullerton", "Fullerton Museum Center", "Anaheim Packing District", "Camelot Golfland", "Brea Mall", "Laguna Lake Park"];
-        subtitle = ["Breakfast and exploration", "Visit", "Lunch", "Fun", "Early dinner and shopping", "Relaxing walk and dessert"];
-        time = ["8:00 am - 10:00 am", "10:30 am - 12:00pm", "12:30 pm - 2:00 pm", "2:30 pm - 4:30 pm", "5:00 pm - 6:30 pm", "7:00 pm - 8:00 pm"];
-        break;
-      case(2): // family attractions
-        title = ["Downtown Fullerton", "Fullerton Museum Center", "Anaheim Packing District", "Camelot Golfland", "Brea Mall", "Laguna Lake Park"];
-        subtitle = ["Breakfast and exploration", "Visit", "Lunch", "Fun", "Early dinner and shopping", "Relaxing walk and dessert"];
-        time = ["8:00 am - 10:00 am", "10:30 am - 12:00pm", "12:30 pm - 2:00 pm", "2:30 pm - 4:30 pm", "5:00 pm - 6:30 pm", "7:00 pm - 8:00 pm"];
-        break;
-      case(3): // historical locations
-        title = ["Downtown Fullerton", "Fullerton Museum Center", "Anaheim Packing District", "Camelot Golfland", "Brea Mall", "Laguna Lake Park"];
-        subtitle = ["Breakfast and exploration", "Visit", "Lunch", "Fun", "Early dinner and shopping", "Relaxing walk and dessert"];
-        time = ["8:00 am - 10:00 am", "10:30 am - 12:00pm", "12:30 pm - 2:00 pm", "2:30 pm - 4:30 pm", "5:00 pm - 6:30 pm", "7:00 pm - 8:00 pm"];
-        break;
-      default:
-    }
-    setState(() {
-      surveyIndex = i;
-    });
   }
 
   void clearItinerary() {
