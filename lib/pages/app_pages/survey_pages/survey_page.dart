@@ -4,9 +4,12 @@ import 'package:cpsc_362_project/components/previous_question_button.dart';
 import 'package:cpsc_362_project/pages/app_pages/home_page.dart';
 import 'package:cpsc_362_project/pages/app_pages/page_directory.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
+import '../../../components/survery_buttons.dart';
+import 'gpt.dart';
 import 'survey_data.dart';
 
 class SurveyPage extends StatefulWidget {
@@ -15,18 +18,61 @@ class SurveyPage extends StatefulWidget {
 }
 
 class _SurveyPageState extends State<SurveyPage> {
+  bool isAnswered = false;
+
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    final position = await _geolocatorPlatform.getCurrentPosition();
+    print(position.toString());
+    return position;
+  }
+
   List<dynamic> selectedValues = [];
   final List<Widget> questionPages = [];
 
   int _currentQuestionIndex = 0;
   int pageIndex = 0;
 
-  var list = [1, 2, 3, 4, 5, 10, 20];
-  var dropdownValue = 1;
+  var radiusList = [1, 2, 3, 4, 5, 10, 20];
+  var radius = 1;
   var isSelected = List<bool>.filled(5, false);
 
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
 
   void _showTimePicker(bool isStartTime) async {
     final selectedTime = await showTimePicker(
@@ -36,29 +82,38 @@ class _SurveyPageState extends State<SurveyPage> {
     if (selectedTime != null) {
       setState(() {
         if (isStartTime) {
-          _startTime = selectedTime;
+          startTime = selectedTime;
+          print(isAnswered.toString());
         } else {
-          _endTime = selectedTime;
+          endTime = selectedTime;
         }
       });
+    }
+    if (startTime != null && endTime != null) {
+      isAnswered = true;
     }
   }
 
   void nextQuestion() {
     setState(() {
-      if (_currentQuestionIndex == 3 && pageIndex < questionPages.length) {
+      if (_currentQuestionIndex == 3 &&
+          pageIndex < questionPages.length &&
+          isAnswered == true) {
         // Handle the next question button within case 3
         pageIndex++;
-      } else {
-        if (_currentQuestionIndex < SurveyData.getQuestions().length - 1) {
-          pageIndex = 0; // Reset pageIndex when moving to a new main question
-          _currentQuestionIndex++;
-        }
+        isAnswered = false;
+      } else if (_currentQuestionIndex < 4 && isAnswered == true) {
+        pageIndex = 0; // Reset pageIndex when moving to a new main question
+        _currentQuestionIndex++;
+        isAnswered = false;
+      } else if (isAnswered == false) {
+        wrongCredentialMessage("Please answer the prompt before you continue");
       }
       print("Question pages length ${questionPages.length}");
       print("Page index $pageIndex");
       print("Question index $_currentQuestionIndex");
       print("get question ${SurveyData.getQuestions().length}");
+      print(isAnswered.toString());
     });
   }
 
@@ -74,45 +129,27 @@ class _SurveyPageState extends State<SurveyPage> {
     });
   }
 
+  void wrongCredentialMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.blue,
+          title: Center(
+            child: Text(
+              message,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final questions = SurveyData.getQuestions();
-    if (_currentQuestionIndex >= questions.length) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          toolbarHeight: 70,
-          title: const Text(
-            'Questions',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              const Text('All dynamic questions completed!'),
-              const SizedBox(
-                height: 10,
-              ),
-              MyButton(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const PageDirectory();
-                        },
-                      ),
-                    );
-                  },
-                  text: "Go Home")
-            ],
-          ),
-        ),
-      );
-    }
+    final question = SurveyData.getQuestions()[_currentQuestionIndex];
 
-    final question = questions[_currentQuestionIndex];
     Widget buildTimePickerQuestion(Map<String, dynamic> question) {
       return Column(
         children: [
@@ -141,8 +178,8 @@ class _SurveyPageState extends State<SurveyPage> {
             height: 20,
           ),
           Text(
-            _startTime != null
-                ? 'Selected Start Time: ${_startTime!.format(context)}'
+            startTime != null
+                ? 'Selected Start Time: ${startTime!.format(context)}'
                 : '',
             style: const TextStyle(
               fontSize: 20,
@@ -163,8 +200,8 @@ class _SurveyPageState extends State<SurveyPage> {
             height: 20,
           ),
           Text(
-            _endTime != null
-                ? 'Selected End Time: ${_endTime!.format(context)}'
+            endTime != null
+                ? 'Selected End Time: ${endTime!.format(context)}'
                 : '',
             style: const TextStyle(
               fontSize: 20,
@@ -194,7 +231,7 @@ class _SurveyPageState extends State<SurveyPage> {
             width: 100,
             height: 80,
             child: DropdownButton<int>(
-              value: dropdownValue,
+              value: radius,
               icon: const Icon(
                 Icons.arrow_downward,
                 size: 40,
@@ -212,10 +249,12 @@ class _SurveyPageState extends State<SurveyPage> {
               onChanged: (int? value) {
                 // This is called when the user selects an item.
                 setState(() {
-                  dropdownValue = value!;
+                  isAnswered = true;
+                  _determinePosition();
+                  radius = value!;
                 });
               },
-              items: list.map<DropdownMenuItem<int>>((int value) {
+              items: radiusList.map<DropdownMenuItem<int>>((int value) {
                 return DropdownMenuItem<int>(
                   value: value,
                   child: Text(value.toString()),
@@ -225,6 +264,12 @@ class _SurveyPageState extends State<SurveyPage> {
           ),
         ],
       );
+    }
+
+    Future<List<String>> makeOptions() async {
+      var value = selectedValues[pageIndex];
+      List<String> results = await rec(question['$value'], value);
+      return results;
     }
 
     Widget buildMultiSelectQuestion(Map<String, dynamic> question) {
@@ -262,6 +307,11 @@ class _SurveyPageState extends State<SurveyPage> {
                 setState(() {
                   selectedValues = values;
                   print(selectedValues);
+                  if (selectedValues.isNotEmpty) {
+                    isAnswered = true;
+                  }
+                  makeOptions();
+                  // rec(question['bar'], 'bar');
                 });
               },
             ),
@@ -274,20 +324,73 @@ class _SurveyPageState extends State<SurveyPage> {
       questionPages.clear();
       for (var value in selectedValues) {
         questionPages.add(
-          Column(
-            children: [
-              ListTile(
-                title: Text(
-                  "What type of $value would you like?",
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              // Add your question widgets here
-            ],
+          FutureBuilder<List<String>>(
+            future: makeOptions(), // Call your Future function
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // While waiting for the future to complete, show a loading indicator
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                // Handle any errors that occur during the future execution
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                // If the future completes successfully, use the data
+                var results = snapshot.data!;
+                var optOne = results[0];
+                var optTwo = results.length > 1 ? results[1] : 'Option 2';
+                var optThree = results.length > 2 ? results[2] : 'Option 3';
+                var optFour = results.length > 3 ? results[3] : 'Option 4';
+
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        "What type of $value would you like?",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Column(
+                        children: <Widget>[
+                          const SizedBox(height: 50),
+                          SurveryButtons(
+                            onTap: () {
+                              // Action for option 1
+                            },
+                            text: optOne,
+                          ),
+                          const SizedBox(height: 20),
+                          SurveryButtons(
+                            onTap: () {
+                              // Action for option 2
+                            },
+                            text: optTwo,
+                          ),
+                          const SizedBox(height: 20),
+                          SurveryButtons(
+                            onTap: () {
+                              // Action for option 3
+                            },
+                            text: optThree,
+                          ),
+                          const SizedBox(height: 20),
+                          SurveryButtons(
+                            onTap: () {
+                              // Action for option 4
+                            },
+                            text: optFour,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Text("No data available");
+              }
+            },
           ),
         );
       }
@@ -307,7 +410,7 @@ class _SurveyPageState extends State<SurveyPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return const HomePage();
+                          return const PageDirectory();
                         },
                       ),
                     );
@@ -318,6 +421,10 @@ class _SurveyPageState extends State<SurveyPage> {
         );
       }
     }
+
+    // Widget dynamicSubQuestion() {
+    //    questionPages.clear();
+    //  }
 
     return Scaffold(
       appBar: AppBar(

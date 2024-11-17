@@ -1,28 +1,28 @@
-//UI for sign-in button and gesture detection for tap
+//UI for survey options buttons and gesture detection for tap
 import 'package:flutter/material.dart';
 
-class MyButton extends StatelessWidget {
+class SurveryButtons extends StatelessWidget {
   final Function()? onTap;
   final String text;
-  const MyButton({super.key, required this.onTap, required this.text});
+  const SurveryButtons({super.key, required this.onTap, required this.text});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.symmetric(horizontal: 25),
             decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(10),
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(50),
             ),
             child: Center(
               child: Text(
                 text,
                 style: const TextStyle(
-                  color: Colors.blue,
-                  fontSize: 20,
+                  color: Colors.white,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
               ),
