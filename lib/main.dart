@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'pages/pre_login/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+
 import 'firebase_options.dart';
+import 'pages/pre_login/auth_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,5 +24,3 @@ class MyApp extends StatelessWidget {
     ); //MaterialApp
   }
 }
-
-
