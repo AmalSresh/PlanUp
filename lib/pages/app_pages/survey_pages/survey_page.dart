@@ -4,6 +4,8 @@ import 'package:cpsc_362_project/components/next_question_button.dart';
 import 'package:cpsc_362_project/components/previous_question_button.dart';
 import 'package:cpsc_362_project/pages/app_pages/home_page.dart';
 import 'package:cpsc_362_project/pages/app_pages/page_directory.dart';
+import 'package:cpsc_362_project/pages/app_pages/survey_pages/places.dart';
+import 'package:cpsc_362_project/pages/app_pages/survey_pages/sub-page.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -68,6 +70,18 @@ class _SurveyPageState extends State<SurveyPage> {
             1; // Set to the last page of the previous question
       }
     });
+  }
+
+  void redirect(List<String> subOptions, String option) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SubPage(
+          options: subOptions,
+          mainOption: option,
+        ),
+      ),
+    );
   }
 
   void wrongCredentialMessage(String message) {
@@ -159,6 +173,7 @@ class _SurveyPageState extends State<SurveyPage> {
               ),
               selectedChipColor: Colors.blue.withOpacity(0.5),
               selectedTextStyle: TextStyle(color: Colors.blue[800]),
+              scroll: false,
               onTap: (values) {
                 setState(() {
                   selectedValues = values;
@@ -184,8 +199,8 @@ class _SurveyPageState extends State<SurveyPage> {
             future: makeOptions(), // Call your Future function
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                // While waiting for the future to complete, show a loading indicator
-                return CircularProgressIndicator();
+                return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()));
               } else if (snapshot.hasError) {
                 // Handle any errors that occur during the future execution
                 return Text('Error: ${snapshot.error}');
@@ -212,29 +227,45 @@ class _SurveyPageState extends State<SurveyPage> {
                         children: <Widget>[
                           const SizedBox(height: 50),
                           SurveryButtons(
-                            onTap: () {
-                              // Action for option 1
+                            onTap: () async {
+                              final subOptions = await searchPlaces(optOne);
+                              redirect(subOptions, optOne);
+                              setState(() {
+                                isAnswered = true;
+                              });
                             },
                             text: optOne,
                           ),
                           const SizedBox(height: 20),
                           SurveryButtons(
-                            onTap: () {
-                              // Action for option 2
+                            onTap: () async {
+                              final subOptions = await searchPlaces(optTwo);
+                              redirect(subOptions, optTwo);
+                              setState(() {
+                                isAnswered = true;
+                              });
                             },
                             text: optTwo,
                           ),
                           const SizedBox(height: 20),
                           SurveryButtons(
-                            onTap: () {
-                              // Action for option 3
+                            onTap: () async {
+                              final subOptions = await searchPlaces(optThree);
+                              redirect(subOptions, optThree);
+                              setState(() {
+                                isAnswered = true;
+                              });
                             },
                             text: optThree,
                           ),
                           const SizedBox(height: 20),
                           SurveryButtons(
-                            onTap: () {
-                              // Action for option 4
+                            onTap: () async {
+                              final subOptions = await searchPlaces(optFour);
+                              redirect(subOptions, optFour);
+                              setState(() {
+                                isAnswered = true;
+                              });
                             },
                             text: optFour,
                           ),

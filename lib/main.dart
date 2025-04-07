@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'pages/pre_login/auth_page.dart';
 
+class Globals {
+  static String coordinates = '';
+  static double Radius = 1609.34;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
