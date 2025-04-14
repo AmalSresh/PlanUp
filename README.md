@@ -8,14 +8,22 @@ Users will complete a short survey that quickly helps them select an activity to
 
 ### Installation
 PlanUp target environment: Android 11.0+
+gradle version: 7+
+java version: 17+
+run 
+```flutter doctor```
+clone the repository
+```git clone https://github.com/AmalSresh/CS362.git```
+```cd 
+```flutter pub get```
 
 ### Technologies
 Flutter, OpenAI API, Google Places API, Firebase, Dart, Android Studio
 
-##usge
+##usage
 Sign in with basic credential for testing purpose:
 Username: test@gmail.com
-passoword: test123
+password: test123
 
 Or user can register an account or login with Google
 
