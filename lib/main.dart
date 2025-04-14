@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'firebase_options.dart';
 import 'pages/pre_login/auth_page.dart';
@@ -7,6 +8,7 @@ import 'pages/pre_login/auth_page.dart';
 class Globals {
   static String coordinates = '';
   static double Radius = 1609.34;
+  static String location = '';
 }
 
 void main() async {
@@ -14,6 +16,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Hive.initFlutter();
+  await Hive.openBox('surveyBox');
   runApp(const MyApp());
 }
 

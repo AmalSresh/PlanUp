@@ -6,15 +6,12 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => _HomePageState();
-
-  // void generateCardsCallback(int index) {
-  //   _homePageState?.generateCards(index);
-  // }
 }
 
 _HomePageState? _homePageState;
 
 class _HomePageState extends State<HomePage> {
+  List<String> selectedOptionsList = [];
   @override
   void initState() {
     super.initState();
@@ -44,50 +41,82 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
-      body: SizedBox(
-        height: 10,
-      ),
-      floatingActionButton: Row(
-        //alignment: WrapAlignment.spaceEvenly,
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: 30,
-          ),
-          FloatingActionButton.large(
-            backgroundColor: Colors.blue,
-            onPressed: () {
-              clearItinerary();
-            },
-            child: const Text(
-              'Clear Current Itinerary',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
+      body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
+            width: double.infinity,
+            child: surveyIndex == -1
+                ? defaultHomePageText()
+                : ListView.builder(
+                    itemCount: selectedOptionsList.length,
+                    itemBuilder: (context, index) {
+                      final option = selectedOptionsList[index];
+                      return Card(
+                        color: Colors.blue,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: ListTile(
+                          title: Text(
+                            option,
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          )),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton.large(
+              heroTag: 'FABone',
+              backgroundColor: Colors.blue,
+              onPressed: () {
+                clearItinerary();
+              },
+              child: const Text(
+                'Clear\nItinerary',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
-          ),
-          SizedBox(width: 185),
-          FloatingActionButton.large(
-            backgroundColor: Colors.blue,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SurveyPage(),
-                ),
-              );
-            },
-            child: const Text(
-              'Take Quick Survey',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
+            FloatingActionButton.large(
+              heroTag: 'FABtwo',
+              backgroundColor: Colors.blue,
+              onPressed: () async {
+                final returnedOptions = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SurveyPage()),
+                );
+
+                if (returnedOptions != null && returnedOptions is Map) {
+                  setState(() {
+                    selectedOptionsList =
+                        List<String>.from(returnedOptions['options']);
+                    TimeOfDay? startTime = returnedOptions['start'];
+                    TimeOfDay? endTime = returnedOptions['end'];
+
+                    surveyIndex = 0;
+                  });
+                }
+              },
+              child: const Text(
+                'Quick\nSurvey',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -108,6 +137,7 @@ class _HomePageState extends State<HomePage> {
   void clearItinerary() {
     setState(() {
       surveyIndex = -1;
+      selectedOptionsList.clear();
     });
   }
 }

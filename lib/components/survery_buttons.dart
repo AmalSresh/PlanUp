@@ -1,10 +1,10 @@
 //UI for survey options buttons and gesture detection for tap
 import 'package:flutter/material.dart';
 
-class SurveryButtons extends StatelessWidget {
+class SurveyButtons extends StatelessWidget {
   final Function()? onTap;
   final String text;
-  const SurveryButtons({super.key, required this.onTap, required this.text});
+  const SurveyButtons({super.key, required this.onTap, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +25,7 @@ class SurveryButtons extends StatelessWidget {
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
             )));
   }

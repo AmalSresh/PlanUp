@@ -38,9 +38,8 @@ Future<List<String>> rec(var value, var values) async {
   OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
     model: "gpt-4o-mini",
     responseFormat: {"type": "json_object"},
-    seed: 6,
     messages: requestMessages,
-    temperature: 0.2,
+    temperature: 1.0,
     maxTokens: 500,
   );
 

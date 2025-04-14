@@ -42,6 +42,9 @@ dependencies:
   location: ^6.0.2
   flutter_google_places_sdk: ^0.4.1
   dio: ^5.8.0+1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.12
 
 
 dev_dependencies:

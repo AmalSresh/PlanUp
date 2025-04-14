@@ -2,8 +2,6 @@ import 'package:cpsc_362_project/components/dropdown.dart';
 import 'package:cpsc_362_project/components/my_button.dart';
 import 'package:cpsc_362_project/components/next_question_button.dart';
 import 'package:cpsc_362_project/components/previous_question_button.dart';
-import 'package:cpsc_362_project/pages/app_pages/home_page.dart';
-import 'package:cpsc_362_project/pages/app_pages/page_directory.dart';
 import 'package:cpsc_362_project/pages/app_pages/survey_pages/places.dart';
 import 'package:cpsc_362_project/pages/app_pages/survey_pages/sub-page.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +18,46 @@ class SurveyPage extends StatefulWidget {
   _SurveyPageState createState() => _SurveyPageState();
 }
 
+class selection {
+  final List<String> options = [];
+  TimeOfDay? start;
+  TimeOfDay? end;
+
+  void saveTime(TimeOfDay? startTime, TimeOfDay? endTime) {
+    start = startTime;
+    end = endTime;
+  }
+
+  void add(String option) {
+    if (options.length < 5) {
+      options.add(option);
+      print("these are the options stored: ${options}");
+    } else {
+      print("error, you are trying to add more than 5 options");
+    }
+  }
+
+  void clear() {
+    options.clear();
+  }
+}
+
 class _SurveyPageState extends State<SurveyPage> {
   bool isAnswered = false;
+  late selection selectedOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedOptions = selection();
+    selectedOptions.clear();
+  }
 
   //list of selected activity types
   List<dynamic> selectedValues = [];
 
   //list of question pages that are
-  final List<Widget> questionPages = [];
+  int subQuestion = 0;
 
   int currentQuestionIndex = 0;
   int pageIndex = 0;
@@ -39,23 +69,32 @@ class _SurveyPageState extends State<SurveyPage> {
 
   void nextQuestion() {
     setState(() {
-      if (currentQuestionIndex == 3 &&
-          pageIndex < questionPages.length &&
-          isAnswered == true) {
-        // Handle the next question button within case 3
-        pageIndex++;
-        isAnswered = false;
+      if (currentQuestionIndex == 3) {
+        // At dynamic question phase
+        if (pageIndex < subQuestion - 1 && isAnswered == true) {
+          // Go to next sub-question
+          pageIndex++;
+          isAnswered = false;
+        } else if (pageIndex == subQuestion - 1 && isAnswered == true) {
+          // Finished all dynamic pages
+          currentQuestionIndex++;
+          pageIndex = 0;
+          isAnswered = false;
+        } else {
+          wrongCredentialMessage(
+              "Please answer the prompt before you continue");
+        }
       } else if (currentQuestionIndex < 4 && isAnswered == true) {
-        pageIndex = 0; // Reset pageIndex when moving to a new main question
+        // For non-dynamic questions
+        pageIndex = 0;
         currentQuestionIndex++;
         isAnswered = false;
       } else if (isAnswered == false) {
         wrongCredentialMessage("Please answer the prompt before you continue");
       }
-      print("Question pages length ${questionPages.length}");
+      print("Question pages length ${subQuestion}");
       print("Page index $pageIndex");
       print("Question index $currentQuestionIndex");
-      print("get question ${SurveyData.getQuestions().length}");
       print(isAnswered.toString());
     });
   }
@@ -66,8 +105,8 @@ class _SurveyPageState extends State<SurveyPage> {
         pageIndex--;
       } else if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
-        pageIndex = questionPages.length -
-            1; // Set to the last page of the previous question
+        pageIndex =
+            subQuestion - 1; // Set to the last page of the previous question
       }
     });
   }
@@ -79,6 +118,7 @@ class _SurveyPageState extends State<SurveyPage> {
         builder: (context) => SubPage(
           options: subOptions,
           mainOption: option,
+          selectedOptions: selectedOptions,
         ),
       ),
     );
@@ -104,7 +144,6 @@ class _SurveyPageState extends State<SurveyPage> {
   @override
   Widget build(BuildContext context) {
     final question = SurveyData.getQuestions()[currentQuestionIndex];
-
     Widget buildTimePickerQuestion(Map<String, dynamic> question) {
       return Column(
         children: [
@@ -113,6 +152,7 @@ class _SurveyPageState extends State<SurveyPage> {
             onTimeSelected: (answered, question, startTime, endTime) {
               setState(() {
                 isAnswered = answered;
+                selectedOptions.saveTime(startTime, endTime);
               });
             },
           ),
@@ -134,12 +174,6 @@ class _SurveyPageState extends State<SurveyPage> {
           ),
         ],
       );
-    }
-
-    Future<List<String>> makeOptions() async {
-      var value = selectedValues[pageIndex];
-      List<String> results = await rec(question['$value'], value);
-      return results;
     }
 
     Widget buildMultiSelectQuestion(Map<String, dynamic> question) {
@@ -180,9 +214,8 @@ class _SurveyPageState extends State<SurveyPage> {
                   print(selectedValues);
                   if (selectedValues.isNotEmpty) {
                     isAnswered = true;
+                    subQuestion = selectedValues.length;
                   }
-                  makeOptions();
-                  // rec(question['bar'], 'bar');
                 });
               },
             ),
@@ -192,126 +225,129 @@ class _SurveyPageState extends State<SurveyPage> {
     }
 
     Widget buildDynamicQuestions() {
-      questionPages.clear();
-      for (var value in selectedValues) {
-        questionPages.add(
-          FutureBuilder<List<String>>(
-            future: makeOptions(), // Call your Future function
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                    body: Center(child: CircularProgressIndicator()));
-              } else if (snapshot.hasError) {
-                // Handle any errors that occur during the future execution
-                return Text('Error: ${snapshot.error}');
-              } else if (snapshot.hasData) {
-                // If the future completes successfully, use the data
-                var results = snapshot.data!;
-                var optOne = results[0];
-                var optTwo = results.length > 1 ? results[1] : 'Option 2';
-                var optThree = results.length > 2 ? results[2] : 'Option 3';
-                var optFour = results.length > 3 ? results[3] : 'Option 4';
+      if (pageIndex >= selectedValues.length) {
+        //currentQuestionIndex++;
+      }
 
-                return Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        "What type of $value would you like?",
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Column(
-                        children: <Widget>[
-                          const SizedBox(height: 50),
-                          SurveryButtons(
-                            onTap: () async {
-                              final subOptions = await searchPlaces(optOne);
-                              redirect(subOptions, optOne);
-                              setState(() {
-                                isAnswered = true;
-                              });
-                            },
-                            text: optOne,
-                          ),
-                          const SizedBox(height: 20),
-                          SurveryButtons(
-                            onTap: () async {
-                              final subOptions = await searchPlaces(optTwo);
-                              redirect(subOptions, optTwo);
-                              setState(() {
-                                isAnswered = true;
-                              });
-                            },
-                            text: optTwo,
-                          ),
-                          const SizedBox(height: 20),
-                          SurveryButtons(
-                            onTap: () async {
-                              final subOptions = await searchPlaces(optThree);
-                              redirect(subOptions, optThree);
-                              setState(() {
-                                isAnswered = true;
-                              });
-                            },
-                            text: optThree,
-                          ),
-                          const SizedBox(height: 20),
-                          SurveryButtons(
-                            onTap: () async {
-                              final subOptions = await searchPlaces(optFour);
-                              redirect(subOptions, optFour);
-                              setState(() {
-                                isAnswered = true;
-                              });
-                            },
-                            text: optFour,
-                          ),
-                        ],
-                      ),
+      String value = selectedValues[pageIndex];
+
+      return FutureBuilder<List<String>>(
+        future: rec(question['$value'], value),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            var results = snapshot.data!;
+            var optOne = results[0];
+            var optTwo = results.length > 1 ? results[1] : 'Option 2';
+            var optThree = results.length > 2 ? results[2] : 'Option 3';
+            var optFour = results.length > 3 ? results[3] : 'Option 4';
+
+            return Column(
+              children: [
+                ListTile(
+                  title: Text(
+                    "What type of $value would you like?",
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                );
-              } else {
-                return Text("No data available");
-              }
-            },
-          ),
-        );
-      }
-      if (pageIndex < questionPages.length) {
-        return questionPages[pageIndex];
-      } else {
-        return Center(
-          child: Column(
-            children: [
-              const Text('All  DY questions completed!'),
-              const SizedBox(
-                height: 10,
-              ),
-              MyButton(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const PageDirectory();
+                  ),
+                  subtitle: Column(
+                    children: <Widget>[
+                      const SizedBox(height: 50),
+                      SurveyButtons(
+                        onTap: () async {
+                          final subOptions = await searchPlaces(optOne);
+                          redirect(subOptions, optOne);
+                          setState(() {
+                            isAnswered = true;
+                            if (subOptions.isNotEmpty) {
+                              nextQuestion();
+                            }
+                          });
                         },
+                        text: optOne,
                       ),
-                    );
-                  },
-                  text: "Go Home")
-            ],
-          ),
-        );
-      }
+                      const SizedBox(height: 20),
+                      SurveyButtons(
+                        onTap: () async {
+                          final subOptions = await searchPlaces(optTwo);
+                          const CircularProgressIndicator();
+                          redirect(subOptions, optTwo);
+                          setState(() {
+                            isAnswered = true;
+                            if (subOptions.isNotEmpty) {
+                              nextQuestion();
+                            }
+                          });
+                        },
+                        text: optTwo,
+                      ),
+                      const SizedBox(height: 20),
+                      SurveyButtons(
+                        onTap: () async {
+                          final subOptions = await searchPlaces(optThree);
+                          redirect(subOptions, optThree);
+                          setState(() {
+                            isAnswered = true;
+                            if (subOptions.isNotEmpty) {
+                              nextQuestion();
+                            }
+                          });
+                        },
+                        text: optThree,
+                      ),
+                      const SizedBox(height: 20),
+                      SurveyButtons(
+                        onTap: () async {
+                          final subOptions = await searchPlaces(optFour);
+                          redirect(subOptions, optFour);
+                          setState(() {
+                            isAnswered = true;
+                            if (subOptions.isNotEmpty) {
+                              nextQuestion();
+                            }
+                          });
+                        },
+                        text: optFour,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const Text("No data available");
+          }
+        },
+      );
     }
 
-    // Widget dynamicSubQuestion() {
-    //    questionPages.clear();
-    //  }
+    Widget endPage() {
+      return Center(
+        child: Column(
+          children: [
+            const Text('All questions completed!'),
+            const SizedBox(
+              height: 10,
+            ),
+            MyButton(
+                onTap: () {
+                  Navigator.pop(context, {
+                    'options': selectedOptions.options,
+                    'start': selectedOptions.start,
+                    'end': selectedOptions.end,
+                  });
+                },
+                text: "Go Home")
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -340,28 +376,7 @@ class _SurveyPageState extends State<SurveyPage> {
             case 3:
               return buildDynamicQuestions();
             case 4:
-              return Center(
-                child: Column(
-                  children: [
-                    const Text('All questions completed!'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    MyButton(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const HomePage();
-                              },
-                            ),
-                          );
-                        },
-                        text: "Go Home")
-                  ],
-                ),
-              ); // }
+              return endPage();
             default:
               return const SizedBox.shrink();
           }
