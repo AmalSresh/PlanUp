@@ -44,17 +44,17 @@ run the app
 Flutter, OpenAI API, Google Places API, Firebase, Dart, Android Studio
 
 ### Packages
-- firebase_auth
-- firebase_core
-- google_sign_in
-- dart_openai
-- multi_select_flutter
-- envied
-- permission_handler
-- location
-- dio
+- firebase_auth - https://pub.dev/packages/firebase_auth
+- firebase_core - https://pub.dev/packages/firebase_core
+- google_sign_in - https://pub.dev/packages/google_sign_in
+- dart_openai - https://pub.dev/packages/dart_openai
+- multi_select_flutter - https://pub.dev/packages/multi_select_flutter
+- envied - https://pub.dev/packages/envied
+- permission_handler - https://pub.dev/packages/permission_handler
+- location - https://pub.dev/packages/location
+- dio - https://pub.dev/packages/dio
 
-##usage
+### Usage
 Sign in with basic credential for testing purpose:
 Username: test@gmail.com
 password: test123
