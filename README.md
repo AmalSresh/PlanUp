@@ -22,4 +22,10 @@ Or user can register an account or login with Google
 ### Contributors
 - Amal Suresh
 
+<img src="lib/images/sign_in_page.png" width = 300 height = 600>
+<img src="lib/images/home_page.png" width = 300 height = 600>
+<img src="lib/images/multi_select_page.png" width = 300 height = 600>
+<img src="lib/images/sub_page_one.png" width = 300 height = 600>
+<img src="lib/images/sub_page_2.png" width = 300 height = 600>
+<img src="lib/images/final_page.png" width = 300 height = 600>
 
