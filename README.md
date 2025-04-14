@@ -63,6 +63,10 @@ Or user can register an account or login with Google
 
 ### Contributors
 - Amal Suresh
+- Carson Szeder
+- Cyrus Manoj
+- Christopher Liwang
+- Ethan Jin
 
 <img src="lib/images/sign_in_page.png" width = 300 height = 600>
 <img src="lib/images/home_page.png" width = 300 height = 600>
